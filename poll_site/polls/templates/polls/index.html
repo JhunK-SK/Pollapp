@@ -1,0 +1,25 @@
+{% extends 'polls/base.html' %}
+
+{% block title %}Main Polls{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-md-center">
+        <div class="col col-lg-8">
+            <div class="card bg-light border-1">
+                <div class="card-header">
+                    POLL QUESTIONS
+                </div>
+                {% if polls %}
+                {% for poll in polls %}
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">{{ poll.question }}</li>
+                    </ul>
+                {% endfor %}
+                {% endif %}
+                <div class="div-footer">
+                    <a href="{% url 'create_poll' %}"><button type="button" class="float-end btn btn-outline-dark mb-2 me-2 mt-2">Create Poll</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
