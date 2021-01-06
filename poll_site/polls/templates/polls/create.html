@@ -5,11 +5,11 @@
 
 {% block content %}
     <div class="row justify-content-md-center">
-        <div class="col col-lg-8">
+        <div class="col col-lg-7">
             <div class="card bg-light border-1">
-                <form action="{% url 'create_poll' %}" method="POST">
+                <form action="{% url 'create_poll' %}" method="POST" id="create-form">
                     <div class="card-header">
-                        Write your poll
+                        <h3>Write your poll</h3>
                     </div>
                     {% csrf_token %}
                     <div class="container">
@@ -36,10 +36,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="div-footer">
-                        <input type="submit" name="submit" value="Create" class="btn btn-outline-dark float-end mb-2 me-2 mt-2">                                              
-                    </div>
-                </form>
+                </form> 
+                <div class="card-footer">
+                    <a href="{% url 'home' %}"><button class="btn btn-outline-dark btn-sm">Back to polls</button></a>  
+                    <input type="submit" form="create-form" name="submit" value="Create" class="btn btn-outline-dark btn-sm float-end">
+                </div>
             </div>
         </div>
     </div>

@@ -1,23 +1,101 @@
 {% extends 'polls/base.html' %}
+{% load static %}
 
 {% block title %}Main Polls{% endblock %}
 
 {% block content %}
+    <!-- {{ polls.has_previous }}
+    {{ polls.number }}
+    {{ polls.paginator.count }}
+    {{ polls.paginator.num_pages }}
+    {{ polls.paginator.page_range }}
+    {{ polls.has_next }} -->
+
+    
     <div class="row justify-content-md-center">
-        <div class="col col-lg-8">
+        <div class="col col-lg-7">
             <div class="card bg-light border-1">
                 <div class="card-header">
-                    POLL QUESTIONS
+                    <!-- Pagination section -->
+                    <nav aria-label="paginationPage" class="float-end">
+                        <ul class="pagination pagination-sm d-inlineblock">
+                            {% if polls.has_previous %}
+                                <li class="page-item"></li>
+                                    <a class="page-link" href="?page=1" aria-label="firstPage">
+                                        <span aria-hidden="true"><i class="fas fa-angle-double-left"></i></span>
+                                    </a>
+                                </li>
+                                <li class="page-item"></li>
+                                    <a class="page-link" href="?page={{ polls.previous_page_number }}" aria-label="previousPage">
+                                        <span aria-hidden="true"><i class="fas fa-angle-left"></i></span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                            
+                            {% for num in polls.paginator.page_range %}
+                
+                            {% if polls.number == num %}
+                                <li class="page-item"><a class="page-link" href="?page={{ num }}"><strong>{{ num }}</strong></a></li>
+                
+                            {% elif num > polls.number|add:'-2' and num < polls.number|add:'+2' %}
+                                <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                            {% endif %}
+                
+                        {% endfor %}
+                        
+                        {% if polls.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ polls.next_page_number }}" aria-label="Next">
+                                    <span aria-hidden="true"><i class="fas fa-angle-right"></i></span>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ polls.paginator.num_pages }}" aria-label="lastPage">
+                                    <span aria-hidden="true"><i class="fas fa-angle-double-right"></i></span>
+                                </a>
+                            </li>
+                        {% endif %}
+                
+                        </ul>
+                    </nav> <!-- pagination section end -->
+                    <h3>Poll Question</h3>
                 </div>
                 {% if polls %}
                 {% for poll in polls %}
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">{{ poll.question }}</li>
+                        <li class="list-group-item">
+                            {{ poll.question }}
+                            <div class="float-end">
+                                <a href="{% url 'vote' poll.id %}"><button class="btn btn-outline-success btn-sm">Vote</button></a>
+                                <a href="{% url 'result' poll.id %}"><button class="btn btn-outline-warning btn-sm">Result</button></a>
+
+                                <!-- modal trigger button to delete a poll -->
+                                <button class="btn btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#delete-poll">Delete</button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="delete-poll" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Delete Poll</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Do you want to delete selected poll?</p>                                              
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+                                                <a href="{% url 'delete_poll' poll.id %}"><button type="button" class="btn btn-danger">Delete</button></a>                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                            
+                        </li>
                     </ul>
                 {% endfor %}
                 {% endif %}
-                <div class="div-footer">
-                    <a href="{% url 'create_poll' %}"><button type="button" class="float-end btn btn-outline-dark mb-2 me-2 mt-2">Create Poll</button></a>
+                <div class="footer">
+                    <a href="{% url 'create_poll' %}"><button type="button" class="float-end btn btn-outline-dark btn-sm mb-2 me-2 mt-2">Create Poll</button></a>
                 </div>
             </div>
         </div>

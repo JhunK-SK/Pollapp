@@ -4,5 +4,40 @@
 {% block title%}Give Your Vote{% endblock%}
 
 {% block content %}
-
+    <div class="row justify-content-md-center">
+        <div class="col col-lg-7">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Give Your Vote</h3>
+                </div>
+                <form action="{% url 'vote' poll.id %}" method="POST" id="vote-form">
+                    <div class="container mt-3 mb-3">
+                        {% csrf_token %}
+                            <h4>{{ poll.question }}</h4>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="poll-option" id="option_one" value="option_one" required>
+                            <label class="form-check-label" for="option_one">
+                              {{ poll.option_one }}
+                            </label>
+                        </div>  
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="poll-option" id="option_two" value="option_two">
+                            <label class="form-check-label" for="option_two">
+                              {{ poll.option_two }}
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="poll-option" id="option_three" value="option_three">
+                            <label class="form-check-label" for="option_three">
+                              {{ poll.option_three }}
+                            </label>
+                        </div>         
+                    </div>
+                </form>
+                <div class="card-footer">
+                    <input type="submit" form="vote-form" name="submit" value="Vote" class="btn btn-outline-dark btn-sm float-end">                                              
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock%}
