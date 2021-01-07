@@ -17,6 +17,12 @@ urlpatterns = [
     # Result Page.
     path('result/<int:poll_id>', views.result, name='result'),
     
-    # Result data for a Chart.
-    path('resultdata/<int:obj>', views.result_data, name="result_data"),
+    # Login
+    path('login/', views.loginPage, name="login"),
+    
+    # Logout
+    path('logout/', views.logoutPage, name="logout"),
+    
+    # Register
+    path('register/', views.register, name='register'),
 ]

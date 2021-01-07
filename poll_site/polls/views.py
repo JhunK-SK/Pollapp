@@ -1,8 +1,55 @@
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from .models import Poll
-from .forms import PollForm
+from .forms import PollForm, CreateUserForm
 from django.http import JsonResponse
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+
+from django.contrib.auth.decorators import login_required
+
+def register(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    else:
+        form = CreateUserForm()
+        
+        if request.method == 'POST':
+            form = CreateUserForm(request.POST)
+            if form.is_valid():
+                form.save()
+                user = form.cleaned_data.get('username')
+                messages.success(request, 'Account was created for ' + user)
+                
+                return redirect('login')
+        
+        context = {'form': form}
+        return render(request, 'polls/register.html', context)
+
+def loginPage(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    else:
+        if request.method == 'POST':
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            
+            user = authenticate(request, username=username, password=password)
+            
+            if user is not None:
+                login(request, user)
+                return redirect('home')
+            else:
+                messages.info(request, 'Username or Password is incorrect')
+                return redirect('login')
+            
+        context = {}
+        return render(request, 'polls/login.html', context)
+
+def logoutPage(request):
+    logout(request)
+    return redirect('login')
 
 def index(request):
     polls = Poll.objects.all().order_by('-created_date')
@@ -16,6 +63,7 @@ def index(request):
     context = {'polls': polls}
     return render(request, 'polls/index.html', context)
 
+@login_required(login_url='login')
 def create(request):
     form = PollForm()
     
@@ -29,6 +77,7 @@ def create(request):
     context = {'form': form}
     return render(request, 'polls/create.html', context)
 
+@login_required(login_url='login')
 def vote(request, poll_id):
     poll = Poll.objects.get(pk=poll_id)
     
@@ -48,26 +97,13 @@ def vote(request, poll_id):
     context = {'poll': poll}
     return render(request, 'polls/vote.html', context)
 
+@login_required(login_url='login')
 def result(request, poll_id):
     poll = Poll.objects.get(pk=poll_id)
     context = {'poll': poll}
     return render(request, 'polls/result.html', context)
 
+@login_required(login_url='login')
 def delete_poll(request, poll_id):
     poll = Poll.objects.get(pk=poll_id).delete() 
     return redirect('home')
-
-def result_data(request, obj):
-    voteData = []
-    poll = Poll.objects.get(id=obj)
-    
-    voteData.append({
-        poll.option_one: poll.option_one_count
-    })
-    voteData.append({
-        poll.option_two: poll.option_two_count
-    })
-    voteData.append({
-        poll.option_three: poll.option_three_count
-    })
-    return JsonResponse(voteData, safe=False)

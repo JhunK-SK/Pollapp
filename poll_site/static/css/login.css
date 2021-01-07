@@ -1,0 +1,53 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #ade8f4 !important ;
+    height: 100%;
+}
+
+/* font-family: 'Merriweather Sans', sans-serif; */
+
+
+.user-card {
+    width: 400px;
+    background-color: #48cae4;
+    margin-top:auto;
+    margin-bottom: auto;
+    -webkit-box-shadow: 5px 5px 19px 5px rgba(0,0,0,0.51); 
+    box-shadow: 5px 5px 19px 5px rgba(0,0,0,0.51);
+}
+
+#form-title {
+    color: #fff;
+}
+
+.form-container {
+    width: 80%;
+    margin: auto auto;
+}
+.login-btn {
+    background-color: #06d6a0 !important;
+    width: 100%;
+}
+.login-btn:hover {
+    background-color: #ddebe7 !important;
+}
+
+.signup-link {
+    text-decoration: none;
+}
+.signup-link:hover {
+    color: #fff;
+}
+
+.input-group-text {
+    background: #f7ba5b !important;
+    color: white !important;
+    border: 0 !important;
+    border-radius: 0.25rem 0 0 0.25rem !important;
+}
+
+#message {
+    background-color: #043b2d;
+    color: #fff;
+}
