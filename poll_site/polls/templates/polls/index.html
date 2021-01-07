@@ -21,12 +21,12 @@
                         <ul class="pagination pagination-sm d-inlineblock">
                             {% if polls.has_previous %}
                                 <li class="page-item"></li>
-                                    <a class="page-link" href="?page=1" aria-label="firstPage">
+                                    <a class="page-link" href="?page=1" aria-label="firstPage" style="background-color: #f7f7f7; color: black;">
                                         <span aria-hidden="true"><i class="fas fa-angle-double-left"></i></span>
                                     </a>
                                 </li>
                                 <li class="page-item"></li>
-                                    <a class="page-link" href="?page={{ polls.previous_page_number }}" aria-label="previousPage">
+                                    <a class="page-link" href="?page={{ polls.previous_page_number }}" aria-label="previousPage" style="background-color: #f7f7f7; color: black;">
                                         <span aria-hidden="true"><i class="fas fa-angle-left"></i></span>
                                     </a>
                                 </li>
