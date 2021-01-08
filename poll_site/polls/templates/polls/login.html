@@ -40,6 +40,9 @@
                                 <input type="password" class="form-control" placeholder="password" aria-label="password" aria-describedby="password" name="password">
                             </div>
                         </div>
+                        {% if request.GET.next %}
+                            <input type="hidden" name="next" value="{{ request.GET.next }}">
+                        {% endif %}
                         <div class="d-flex justify-content-center login-container mb-3 me-3 ms-3">
                             <input type="submit" class="btn login-btn" value="Login">
                         </div>
