@@ -8,50 +8,54 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
+from .decorators import unauthenticated_user, allowed_users
 
+@unauthenticated_user
 def register(request):
-    if request.user.is_authenticated:
-        return redirect('home')
-    else:
-        form = CreateUserForm()
-        
-        if request.method == 'POST':
-            form = CreateUserForm(request.POST)
-            if form.is_valid():
-                form.save()
-                user = form.cleaned_data.get('username')
-                messages.success(request, 'Account was created for ' + user)
-                
-                return redirect('login')
-        
-        context = {'form': form}
-        return render(request, 'polls/register.html', context)
+    # if request.user.is_authenticated:
+    #     return redirect('home')
+    # else:
+    form = CreateUserForm()
+    
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            user = form.cleaned_data.get('username')
+            messages.success(request, 'Account was created for ' + user)
+            
+            return redirect('login')
+    
+    context = {'form': form}
+    return render(request, 'polls/register.html', context)
 
+@unauthenticated_user
 def loginPage(request):
-    if request.user.is_authenticated:
-        return redirect('home')
-    else:
-        if request.method == 'POST':
-            username = request.POST.get('username')
-            password = request.POST.get('password')
-            
-            user = authenticate(request, username=username, password=password)
-            
-            if user is not None:
-                login(request, user)
-                return redirect('home')
-            else:
-                messages.info(request, 'Username or Password is incorrect')
-                return redirect('login')
-            
-        context = {}
-        return render(request, 'polls/login.html', context)
+    # if request.user.is_authenticated:
+    #     return redirect('home')
+    # else:
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.info(request, 'Username or Password is incorrect')
+            return redirect('login')
+        
+    context = {}
+    return render(request, 'polls/login.html', context)
 
 def logoutPage(request):
     logout(request)
     return redirect('login')
 
 def index(request):
+    # print(list(request.user.groups.values_list('name', flat=True)))
     polls = Poll.objects.all().order_by('-created_date')
     
     paginator = Paginator(polls, 3)
@@ -104,6 +108,7 @@ def result(request, poll_id):
     return render(request, 'polls/result.html', context)
 
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def delete_poll(request, poll_id):
     poll = Poll.objects.get(pk=poll_id).delete() 
     return redirect('home')
